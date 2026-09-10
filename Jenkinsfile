@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'mvm test'
+                sh 'mvn test'
             }
         }
         stage('Archive Artifact') {
