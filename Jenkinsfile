@@ -2,6 +2,10 @@ pipeline {
 
     agent any
 
+    tools {
+        maven 'M3'   // must match the name you gave it in step 3
+    }
+
     stages {
         stage('Checkout') {
             steps {
