@@ -34,7 +34,7 @@ pipeline {
             echo 'Build succeeded!'
         }
         failure {
-            echo 'Build failed — check console output.'
+            echo 'Build failed — check console output for detailed review.'
         }
     }
 
