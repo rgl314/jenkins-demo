@@ -51,10 +51,12 @@ pipeline {
 
     post {
         success {
-            echo 'Build succeeded!'
+            slackSend(channel: '#builds', color: 'good',
+                    message: "✅ ${env.JOB_NAME} #${env.BUILD_NUMBER} succeeded — ${env.BUILD_URL}")
         }
         failure {
-            echo 'Build failed — check console output for detailed review.'
+            slackSend(channel: '#builds', color: 'danger',
+                    message: "❌ ${env.JOB_NAME} #${env.BUILD_NUMBER} failed — ${env.BUILD_URL}console")
         }
     }
 
