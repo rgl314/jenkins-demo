@@ -6,6 +6,11 @@ pipeline {
         maven 'M3'   // must match the name you gave it in step 3
     }
 
+    environtment {
+        IMAGE_NAME = 'rgl314/jenkins-demo'
+        IMAGE_TAG  = '1'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -22,15 +27,23 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('Archive Artifact') {
+        stage('Docker Build') {
             steps {
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest ."
             }
         }
-        stage('Credentials') {
+        stage('Docker Push') {
             steps {
-                withCredentials([string(credentialsId: 'test-secret', variable: 'MY_SECRET')]) {
-                    sh 'echo "The secret is: $MY_SECRET"'
+                withCredentials([usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                        docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                        docker push ${IMAGE_NAME}:latest
+                    '''
                 }
             }
         }
