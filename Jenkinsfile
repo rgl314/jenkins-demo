@@ -27,6 +27,13 @@ pipeline {
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
+        stage('Credentials') {
+            steps {
+                withCredentials([string(credentialsId: 'test-secret', variable: 'MY_SECRET')]) {
+                    sh 'echo "The secret is: $MY_SECRET"'
+                }
+            }
+        }
     }
 
     post {
