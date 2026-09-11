@@ -6,7 +6,7 @@ pipeline {
         maven 'M3'   // must match the name you gave it in step 3
     }
 
-    environtment {
+    environment {
         IMAGE_NAME = 'rgl314/jenkins-demo'
         IMAGE_TAG  = '1'
     }
